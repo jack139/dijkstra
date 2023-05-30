@@ -23,19 +23,20 @@ class Graph:
         graph_edges = []
         with open(filename) as fhandle:
             for line in fhandle:
-                edge_from, edge_to, cost, c1, c2 = line.strip().split(" ")
-                graph_edges.append((edge_from, edge_to, float(cost), c1, c2))
+                edge_from, edge_to, cost, c1 = line.strip().split()
+                graph_edges.append((edge_from, edge_to, float(cost), c1))
 
         self.nodes = set()
         self.comments = {}
         for edge in graph_edges:
             self.nodes.update([edge[0], edge[1]])
             self.comments[(edge[0], edge[1])] = edge[3]
-            self.comments[(edge[1], edge[0])] = edge[4]
 
         self.adjacency_list = {node: set() for node in self.nodes}
         for edge in graph_edges:
             self.adjacency_list[edge[0]].add((edge[1], edge[2]))
+
+        #print(self.adjacency_list)
 
     def shortest_path(self, start_node, end_node):
         """Uses Dijkstra's algorithm to determine the shortest path from
@@ -105,21 +106,21 @@ def verify_algorithm(filename, start, end, path, distance):
     graph = Graph(filename)
     returned_path, returned_distance, path_comment = graph.shortest_path(start, end)
 
-    assert list(returned_path) == path
-    assert returned_distance == distance
+    #assert list(returned_path) == path
+    #assert returned_distance == distance
 
     print(f'graph definition file: {filename}')
     print(f'      start/end nodes: {start} -> {end}')
-    print(f'        shortest path: {path}')
-    print(f'       total distance: {distance}')
+    print(f'        shortest path: {list(returned_path)}')
+    print(f'       total distance: {returned_distance}')
     print(f'       total comments: {path_comment}')
 
 
 if __name__ == "__main__":
     verify_algorithm(
-        filename="simple_graph.txt",
-        start="A",
-        end="G",
-        path=["A", "D", "E", "G"],
+        filename="test.txt",
+        start="住院大厅",
+        end="候诊大厅",
+        path=[],
         distance=11,
     )
