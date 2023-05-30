@@ -18,13 +18,18 @@ package dijkstra
 import "fmt"
 
 type node struct {
-	key  string
+	key string
 	cost int
+}
+
+type edge struct {
+	cost int
+	note string
 }
 
 // Graph is a rappresentation of how the points in our graph are connected
 // between each other
-type Graph map[string]map[string]int
+type Graph map[string]map[string]edge
 
 // Path finds the shortest path between start and target, also returning the
 // total cost of the found path.
@@ -75,7 +80,7 @@ func (g Graph) Path(start, target string) (path []string, cost int, err error) {
 		explored[n.key] = true
 
 		// loop all the neighboring nodes
-		for nKey, nCost := range g[n.key] {
+		for nKey, nEdge := range g[n.key] {
 			// skip alreadt-explored nodes
 			if explored[nKey] {
 				continue
@@ -84,12 +89,12 @@ func (g Graph) Path(start, target string) (path []string, cost int, err error) {
 			// if the node is not yet in the frontier add it with the cost
 			if _, ok := frontier.Get(nKey); !ok {
 				previous[nKey] = n.key
-				frontier.Set(nKey, n.cost+nCost)
+				frontier.Set(nKey, n.cost+nEdge.cost)
 				continue
 			}
 
 			frontierCost, _ := frontier.Get(nKey)
-			nodeCost := n.cost + nCost
+			nodeCost := n.cost + nEdge.cost
 
 			// only update the cost of this node in the frontier when
 			// it's below what's currently set

@@ -1,7 +1,6 @@
 package dijkstra
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -16,9 +15,9 @@ func TestEmptyGraph(t *testing.T) {
 
 func TestGraphErrors(t *testing.T) {
 	g := Graph{
-		"a": {"b": 20, "c": 80},
-		"b": {"a": 20, "c": 20},
-		"c": {"a": 80, "b": 20},
+		"a": {"b": {note:"note", cost:20}, "c": {note:"note", cost:80}},
+		"b": {"a": {note:"note", cost:20}, "c": {note:"note", cost:20}},
+		"c": {"a": {note:"note", cost:80}, "b": {note:"note", cost:20}},
 	}
 
 	_, _, err := g.Path("a", "z")
@@ -34,9 +33,9 @@ func TestGraphErrors(t *testing.T) {
 
 func TestPath1(t *testing.T) {
 	g := Graph{
-		"a": {"b": 20, "c": 80},
-		"b": {"a": 20, "c": 20},
-		"c": {"a": 80, "b": 20},
+		"a": {"b": {note:"note", cost:20}, "c": {note:"note", cost:80}},
+		"b": {"a": {note:"note", cost:20}, "c": {note:"note", cost:20}},
+		"c": {"a": {note:"note", cost:80}, "b": {note:"note", cost:20}},
 	}
 
 	// The shortest path is correct
@@ -64,11 +63,11 @@ func TestPath1(t *testing.T) {
 
 func TestPath2(t *testing.T) {
 	g := Graph{
-		"a": {"b": 7, "c": 9, "f": 14},
-		"b": {"c": 10, "d": 15},
-		"c": {"d": 11, "f": 2},
-		"d": {"e": 6},
-		"e": {"f": 9},
+		"a": {"b": {note:"note", cost:7},  "c": {note:"note", cost:9}, "f": {note:"note", cost:14}},
+		"b": {"c": {note:"note", cost:10}, "d": {note:"note", cost:15}},
+		"c": {"d": {note:"note", cost:11}, "f": {note:"note", cost:2}},
+		"d": {"e": {note:"note", cost:6}},
+		"e": {"f": {note:"note", cost:9}},
 	}
 
 	// The shortest path is correct
@@ -91,9 +90,9 @@ func TestPath2(t *testing.T) {
 
 func BenchmarkPath(b *testing.B) {
 	g := Graph{
-		"a": {"b": 20, "c": 80},
-		"b": {"a": 20, "c": 20},
-		"c": {"a": 80, "b": 20},
+		"a": {"b": {note:"note", cost:20}, "c": {note:"note", cost:80}},
+		"b": {"a": {note:"note", cost:20}, "c": {note:"note", cost:20}},
+		"c": {"a": {note:"note", cost:80}, "b": {note:"note", cost:20}},
 	}
 
 	b.ResetTimer()
@@ -103,15 +102,15 @@ func BenchmarkPath(b *testing.B) {
 	}
 }
 
-func ExampleGraph_Path() {
+func TestExampleGraph_Path(t *testing.T) {
 	g := Graph{
-		"a": {"b": 20, "c": 80},
-		"b": {"a": 20, "c": 20},
-		"c": {"a": 80, "b": 20},
+		"a": {"b": {note:"note", cost:20}, "c": {note:"note", cost:80}},
+		"b": {"a": {note:"note", cost:20}, "c": {note:"note", cost:20}},
+		"c": {"a": {note:"note", cost:80}, "b": {note:"note", cost:20}},
 	}
 
 	path, cost, _ := g.Path("a", "c") // skipping error handling
 
-	fmt.Printf("path: %v, cost: %v", path, cost)
+	t.Logf("path: %v, cost: %v", path, cost)
 	// Output: path: [a b c], cost: 40
 }

@@ -1,5 +1,6 @@
 # Go Dijkstra
 
 ```bash
-go test dijkstra_test.go dijkstra.go queue.go 
+go test -v .
+go test -v -benchmem -bench .
 ```
